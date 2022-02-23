@@ -1,0 +1,394 @@
+<html>
+<head>
+<style>
+    h1 {
+        color: blue;
+        text-align: center;
+        text-shadow: 0.1em 0.1em 0.05em yellow;
+    }
+
+    legend {
+        color: white;
+        background-color: red;
+    }
+
+    fieldset {
+        background-color: turquoise;
+    }
+
+    input {
+        background-color: yellow;
+    }
+
+    .fecha {
+        background-color: white;
+    }
+
+    .boton1 {
+        background-color: lightgrey;
+    }
+
+    .boton2 {
+        background-color: pink;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+
+<h1>Formulario Información Alta Telefónica</h1>
+<form action="./procesarFormulario.php" name="telefonica">
+<fieldset>
+    <legend>Datos Personales</legend>     
+    Nombre: <input type="text" name="nombre"
+    maxlength="30" /><br />
+    Apellidos: <input type="text" name="apellidos"
+    maxlength="60" /><br />
+    Dirección: <input type="text" name="direccion"
+    maxlength="60" /><br />
+    Código Postal: <input id="codigoPostal" type="text" name="cpostal"
+    pattern="[0-9]{5}" /><br />
+    Localidad: <input id="localidad" type="text" name="localidad" /><br/>
+</fieldset>
+<br />
+<fieldset>
+    <legend>Tipo de Contratación</legend>
+    <input type="radio" name="tipoc" value="nuevo"
+    checked="checked">Nueva Contratación &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" name="tipoc"
+    value="porta">Portabilidad &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" name="tipoc"
+    value="cambio">Cambio de Contrato &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+    <br />
+    Elija la compañía actual:
+    <select name="origen">
+    <option value="movistar">Movistar</option>
+    <option value="orange">Orange</option>
+    <option value="vodafone">Vodafone</option>
+    <option value="yoigo">Yoigo</option>
+    <option value="ninguna">No tengo ninguna
+    compañía</option>
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    En caso de portabilidad, elija la nueva compañía:
+    <select name="origen">
+    <option value="movistar">Movistar</option>
+    <option value="orange">Orange</option>
+    <option value="vodafone">Vodafone</option>
+    <option value="yoigo">Yoigo</option>
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</fieldset>
+<fieldset>
+    <legend>Datos Bancarios</legend>
+
+    País: <input id="ibanPais" type="text" name="pais" value="ES"
+    readonly="readonly" /> (sólo válido ES)<br />
+
+    Control IBAN: <input id="ibanControl" type="text" name="ciban"
+    placeholder="XX" pattern="[0-9]{2}" /> (dos dígitos)<br />
+
+    Entidad: <input id="ibanEntidad" type="text" name="enti"
+    placeholder="XXXX" pattern="[0-9]{4}" /> (cuatro dígitos)<br />
+
+    Sucursal: <input id="ibanSucursal" type="text" name="suc"
+    placeholder="XXXX" pattern="[0-9]{4}" /> (cuatro dígitos)<br />
+
+    DC: <input id="ibanDC" type="text" name="dc" placeholder="XX"
+    pattern="[0-9]{2}" /> (dos dígitos)<br />
+
+    Cuenta: <input id="ibanCuenta" type="text" name="cuenta"
+    placeholder="XXXXXXXXXX" pattern="[0-9]{10}" /> (diez dígitos)<br />
+
+</fieldset>
+<fieldset>
+    <legend>Datos estadísticos - ¿Cómo nos conoció?</legend>
+    <input name="opcion_television" type="checkbox" value="television"/> A través de la TV<br />
+    <input name="opcion_radio" type="checkbox" value="radio"/> A través de la radio<br />
+    <input name="opcion_internet" type="checkbox" value="internet"/> A través de la Internet<br />
+    <input name="opcion_otros" type="checkbox" value="otros"/> Otros<br />
+    <br />
+    <input id="inputValoracion" type="range" min="1" max="5">Valoración [1-5]<br />
+    <br />
+    Fecha de la Encuesta: <input id="date" class="fecha" type="date" value="2019-01-01" min="2019-01-01"> Valoración [1-5]
+</fieldset>
+    <input onclick="verificarDatos()" class="boton1" type="button" value="Enviar Datos" />
+    <input class="boton1" type="reset" value="Borrar Datos" />
+    <br/>
+    <input type="button" class="boton2"  onclick="mostrarvaloracion()"value="Mostrar Valoracion" />
+    <input onclick="mostrarCuentaBancaria()" class="boton2" type="button" value="Mostrar Cuenta" />
+    <input onclick="mostrarDiaSemana()" class="boton2" type="button" value="Mostrar Dia Semana" />
+
+    <div id="mensajeValidacion">
+        <p style="color: green;"  id="infoCorrecta"></p></div>
+        <p style="color:red;" id="infoIncorrecta"></p>
+    </div>
+</form>
+</body>
+
+<script>
+function mostrarvaloracion () {
+
+    var input = document.getElementById("inputValoracion").value;
+
+    window.alert("Has valorado con "+input+" puntos");
+}
+
+function mostrarCuentaBancaria ()
+{
+    var pais = document.getElementById("ibanPais").value;
+    var ibanControl = document.getElementById("ibanControl").value;
+    var ibanEntidad = document.getElementById("ibanEntidad").value;
+    var ibanSucursal = document.getElementById("ibanSucursal").value;
+    var ibanDC = document.getElementById("ibanDC").value;
+    var ibanCuenta = document.getElementById("ibanCuenta").value;
+
+    if(pais ===""|| ibanControl ==="" || ibanEntidad=== "" || ibanSucursal===""|| ibanDC===""|| ibanCuenta ==="")
+    {
+        window.alert("Faltan datos bancarios por rellenar")
+    }
+    else
+    {
+        window.alert("Le informamos que su cuenta bancaria es: "+pais+ibanControl+"-"+ibanEntidad+"-"+ibanSucursal+"-"+ibanDC+ibanCuenta);
+    }
+
+}
+
+function mostrarDiaSemana ()
+{
+    const dias = [
+    'domingo',
+    'lunes',
+    'martes',
+    'miércoles',
+    'jueves',
+    'viernes',
+    'sábado',
+    ];
+
+    var fechaControl = document.querySelector('input[type="date"]');
+    var fechaCompleta = fechaControl.value;
+
+    var dia = new Date(fechaCompleta).getDay();
+
+    window.alert("La fecha seleccionada en el elemento de fecha es un "+dias[dia]);
+}
+
+function verificarDatos()
+{
+    var codigoPostal = document.getElementById("codigoPostal").value;
+    var localidad = document.getElementById("localidad").value;
+
+    const codigoProvincia = [{
+    codigo: '01',
+    provincia: 'Alava'
+    }, {
+    codigo: '02',
+    provincia: 'Albacete'
+    }, {
+    codigo: '03',
+    provincia: 'Alicante'
+    }, {
+    codigo: '04',
+    provincia: 'Almeria'
+    }, {
+    codigo: '05',
+    provincia: 'Avila'
+    }, {
+    codigo: '06',
+    provincia: 'Badajoz'
+    }, {
+    codigo: '07',
+    provincia: 'Islas Baleares'
+    }, {
+    codigo: '08',
+    provincia: 'Barcelona'
+    }, {
+    codigo: '09',
+    provincia: 'Burgos'
+    }, {
+    codigo: '10',
+    provincia: 'Caceres'
+    }, {
+    codigo: '11',
+    provincia: 'Cadiz'
+    }, {
+    codigo: '12',
+    provincia: 'Castellon'
+    }, {
+    codigo: '13',
+    provincia: 'Ciudad Real'
+    }, {
+    codigo: '14',
+    provincia: 'Cordoba'
+    }, {
+    codigo: '15',
+    provincia: 'La Coruna'
+    }, {
+    codigo: '16',
+    provincia: 'Cuenca'
+    }, {
+    codigo: '17',
+    provincia: 'Gerona'
+    }, {
+    codigo: '18',
+    provincia: 'Granada'
+    }, {
+    codigo: '19',
+    provincia: 'Guadalajara'
+    }, {
+    codigo: '20',
+    provincia: 'Guipuzcoa'
+    }, {
+    codigo: '21',
+    provincia: 'Huelva'
+    }, {
+    codigo: '22',
+    provincia: 'Huesca'
+    }, {
+    codigo: '23',
+    provincia: 'Jaen'
+    }, {
+    codigo: '24',
+    provincia: 'Leon'
+    }, {
+    codigo: '25',
+    provincia: 'Lerida'
+    }, {
+    codigo: '26',
+    provincia: 'La Rioja'
+    }, {
+    codigo: '27',
+    provincia: 'Lugo'
+    }, {
+    codigo: '28',
+    provincia: 'Madrid'
+    }, {
+    codigo: '29',
+    provincia: 'Malaga'
+    }, {
+    codigo: '30',
+    provincia: 'Murcia'
+    }, {
+    codigo: '31',
+    provincia: 'Navarra'
+    }, {
+    codigo: '32',
+    provincia: 'Orense'
+    }, {
+    codigo: '33',
+    provincia: 'Asturias'
+    }, {
+    codigo: '34',
+    provincia: 'Palencia'
+    }, {
+    codigo: '35',
+    provincia: 'Las Palmas'
+    }, {
+    codigo: '36',
+    provincia: 'Pontevedra'
+    }, {
+    codigo: '37',
+    provincia: 'Salamanca'
+    }, {
+    codigo: '38',
+    provincia: 'Santa Cruz de Tenerife'
+    }, {
+    codigo: '39',
+    provincia: 'Cantabria'
+    }, {
+    codigo: '40',
+    provincia: 'Segovia'
+    }, {
+    codigo: '41',
+    provincia: 'Sevilla'
+    }, {
+    codigo: '42',
+    provincia: 'Soria'
+    }, {
+    codigo: '43',
+    provincia: 'Tarragona'
+    }, {
+    codigo: '44',
+    provincia: 'Teruel'
+    }, {
+    codigo: '45',
+    provincia: 'Toledo'
+    }, {
+    codigo: '46',
+    provincia: 'Valencia'
+    }, {
+    codigo: '47',
+    provincia: 'Valladolid'
+    }, {
+    codigo: '48',
+    provincia: 'Vizcaya'
+    }, {
+    codigo: '49',
+    provincia: 'Zamora'
+    }, {
+    codigo: '50',
+    provincia: 'Zaragoza'
+    }, {
+    codigo: '51',
+    provincia: 'Ceuta'
+    }, {
+    codigo: '52',
+    provincia: 'Melilla'
+    }]
+    
+    var subCadenaCodigoPostal = codigoPostal.substr(0,2);
+
+    var encontrado=false;
+    var posicion;
+
+    if(codigoPostal.length==5 && !isNaN(codigoPostal))
+    {
+
+        for(let i=0; i<codigoProvincia.length;i++)
+        {
+            console.log(codigoProvincia[i].codigo);
+            if(codigoProvincia[i].codigo == subCadenaCodigoPostal)
+            {
+                encontrado = true;
+                posicion =i;
+                break;
+            }
+        }
+
+        var provinciaCorrecta= false;
+        if(encontrado==true)
+        {
+            console.log("Se encontro el codigo postal correcto")
+
+            if(codigoProvincia[posicion].provincia.toLocaleLowerCase() == localidad.toLocaleLowerCase())
+            {
+                provinciaCorrecta=true;
+                console.log("los datos de la provincia se corresponden con el codigo postal");
+            }
+        }
+        else
+        {
+            console.log("El código postal introducio no existe");
+            window.alert("El código postal introducido no existe");
+        }
+
+        if(provinciaCorrecta==false)
+        {
+            window.alert("La provincia introducida no se corresponden con el código postal");
+            document.getElementById("mensajeValidacion").innerHTML = "<p style='color:red;''> La información del código postal no es correcta</p>";
+        }
+        else
+        {
+            document.getElementById("mensajeValidacion").innerHTML = "<p style='color:green;''> La información del código postal es correcta</p>";
+        }
+    }
+    else
+    {
+        window.alert("El codigo postal debe tener 5 numeros");
+    }
+}
+
+
+</script>
+</html>
